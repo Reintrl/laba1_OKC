@@ -1,0 +1,24 @@
+.root {
+    -fx-font-family: "Arial";
+    -fx-font-size: 12px;
+}
+
+.text-area {
+    -fx-font-family: "Monospaced";
+}
+
+.button {
+    -fx-background-radius: 5;
+}
+
+.combo-box {
+    -fx-background-radius: 5;
+}
+
+.text-field {
+    -fx-background-radius: 5;
+}
+
+.check-box {
+    -fx-padding: 0 0 0 0;
+}

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="org.example.controller.MainController" spacing="10"
+      style="-fx-padding: 10;">
+
+    <HBox spacing="10">
+        <Label text="Port:" />
+        <ComboBox fx:id="portSelector" prefWidth="100" />
+        <Button text="Refresh" onAction="#refreshPorts" />
+
+        <Label text="Baud Rate:" />
+        <ComboBox fx:id="baudRateSelector" prefWidth="80" />
+
+        <Label text="Data Bits:" />
+        <ComboBox fx:id="dataBitsSelector" prefWidth="60" />
+
+        <Label text="Stop Bits:" />
+        <ComboBox fx:id="stopBitsSelector" prefWidth="60" />
+
+        <Label text="Parity:" />
+        <ComboBox fx:id="paritySelector" prefWidth="80" />
+
+        <Button fx:id="openCloseButton" text="Open Port" onAction="#handleOpenClose" />
+    </HBox>
+
+    <Separator />
+
+    <HBox spacing="10">
+        <Label text="Send Byte:" />
+        <TextField fx:id="inputField" prefWidth="100" promptText="Enter byte (0-255 or char)" />
+        <Button fx:id="sendButton" text="Send" onAction="#sendByte" />
+
+        <CheckBox fx:id="hexDisplayCheck" text="HEX" />
+        <CheckBox fx:id="binaryDisplayCheck" text="BIN" />
+        <CheckBox fx:id="autoScrollCheck" text="Auto Scroll" selected="true" />
+        <Button text="Clear Log" onAction="#clearLog" />
+    </HBox>
+
+    <Separator />
+
+    <Label text="Communication Log:" />
+    <TextArea fx:id="logArea" editable="false" VBox.vgrow="ALWAYS" />
+
+</VBox>
