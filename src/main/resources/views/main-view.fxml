@@ -31,7 +31,7 @@
 
     <HBox spacing="10">
         <Label text="Send Byte:" />
-        <TextField fx:id="inputField" prefWidth="100" promptText="Enter byte (0-255 or char)" />
+        <TextField fx:id="inputField" prefWidth="150" promptText="Enter byte (0-255 or char)" />
         <Button fx:id="sendButton" text="Send" onAction="#sendByte" />
 
         <CheckBox fx:id="hexDisplayCheck" text="HEX" />

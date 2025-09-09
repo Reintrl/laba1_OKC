@@ -9,7 +9,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
-
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -31,10 +30,7 @@ public class MainController {
     private Timer receiveTimer;
     private boolean receiving = false;
 
-    private final ObservableList<Integer> baudRates = FXCollections.observableArrayList(
-            110, 300, 600, 1200, 2400, 4800, 9600, 14400, 19200, 38400, 57600, 115200, 128000, 256000
-    );
-
+    private final ObservableList<Integer> baudRates = FXCollections.observableArrayList(110, 300, 600, 1200, 2400, 4800, 9600, 14400, 19200, 38400, 57600, 115200, 128000, 256000);
     private final ObservableList<Integer> dataBitsList = FXCollections.observableArrayList(5, 6, 7, 8);
     private final ObservableList<String> stopBitsList = FXCollections.observableArrayList("1", "1.5", "2");
     private final ObservableList<String> parityList = FXCollections.observableArrayList("None", "Even", "Odd", "Mark", "Space");
@@ -43,31 +39,24 @@ public class MainController {
     public void initialize() {
         baudRateSelector.setItems(baudRates);
         baudRateSelector.getSelectionModel().select(6);
-
         dataBitsSelector.setItems(dataBitsList);
         dataBitsSelector.getSelectionModel().select(3);
-
         stopBitsSelector.setItems(stopBitsList);
         stopBitsSelector.getSelectionModel().select(0);
-
         paritySelector.setItems(parityList);
         paritySelector.getSelectionModel().select(0);
-
         refreshPortList();
-
         inputField.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 sendByte();
             }
         });
-
         communicator = new SerialCommunicator();
     }
 
     private void refreshPortList() {
         String[] ports = SerialCommunicator.getAvailablePorts();
         portSelector.getItems().setAll(ports);
-
         if (ports.length > 0) {
             portSelector.getSelectionModel().select(0);
         }
@@ -88,17 +77,14 @@ public class MainController {
             log("Please select a port");
             return;
         }
-
         int baudRate = baudRateSelector.getValue();
         int dataBits = dataBitsSelector.getValue();
-
         int stopBits;
         switch (stopBitsSelector.getValue()) {
             case "1.5": stopBits = SerialPort.ONE_POINT_FIVE_STOP_BITS; break;
             case "2": stopBits = SerialPort.TWO_STOP_BITS; break;
             default: stopBits = SerialPort.ONE_STOP_BIT; break;
         }
-
         int parity;
         switch (paritySelector.getValue()) {
             case "Even": parity = SerialPort.EVEN_PARITY; break;
@@ -107,14 +93,11 @@ public class MainController {
             case "Space": parity = SerialPort.SPACE_PARITY; break;
             default: parity = SerialPort.NO_PARITY; break;
         }
-
         communicator.setPortParameters(baudRate, dataBits, stopBits, parity);
-
         if (communicator.openPort(port)) {
             log("Port " + port + " opened successfully");
             openCloseButton.setText("Close Port");
             startReceiving();
-
             portSelector.setDisable(true);
             baudRateSelector.setDisable(true);
             dataBitsSelector.setDisable(true);
@@ -130,7 +113,6 @@ public class MainController {
         communicator.closePort();
         log("Port closed");
         openCloseButton.setText("Open Port");
-
         portSelector.setDisable(false);
         baudRateSelector.setDisable(false);
         dataBitsSelector.setDisable(false);
@@ -140,7 +122,6 @@ public class MainController {
 
     private void startReceiving() {
         if (receiving) return;
-
         receiving = true;
         receiveTimer = new Timer(true);
         receiveTimer.scheduleAtFixedRate(new TimerTask() {
@@ -164,7 +145,6 @@ public class MainController {
 
     private void handleReceivedByte(byte data) {
         String display;
-
         if (binaryDisplayCheck.isSelected()) {
             display = "BIN: " + ByteConverter.byteToBinaryString(data);
         } else if (hexDisplayCheck.isSelected()) {
@@ -172,7 +152,6 @@ public class MainController {
         } else {
             display = "DEC: " + data + " (CHAR: '" + (char) data + "')";
         }
-
         log("Received: " + display);
     }
 
@@ -182,18 +161,15 @@ public class MainController {
             log("Port is not open");
             return;
         }
-
         String input = inputField.getText().trim();
         if (input.isEmpty()) {
             log("Please enter a byte to send");
             return;
         }
-
         try {
             byte data = ByteConverter.stringToByte(input);
             if (communicator.sendByte(data)) {
                 String display;
-
                 if (binaryDisplayCheck.isSelected()) {
                     display = "BIN: " + ByteConverter.byteToBinaryString(data);
                 } else if (hexDisplayCheck.isSelected()) {
@@ -201,11 +177,8 @@ public class MainController {
                 } else {
                     display = "DEC: " + data + " (CHAR: '" + (char) data + "')";
                 }
-
                 log("Sent: " + display);
                 inputField.clear();
-            } else {
-                log("Failed to send byte");
             }
         } catch (NumberFormatException e) {
             log("Invalid input: " + e.getMessage());
@@ -221,7 +194,6 @@ public class MainController {
     private void log(String message) {
         String timestamp = java.time.LocalTime.now().format(java.time.format.DateTimeFormatter.ofPattern("HH:mm:ss"));
         logArea.appendText("[" + timestamp + "] " + message + "\n");
-
         if (autoScrollCheck.isSelected()) {
             logArea.setScrollTop(Double.MAX_VALUE);
         }

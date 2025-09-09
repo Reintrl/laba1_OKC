@@ -1,10 +1,17 @@
 package org.example;
 
 import com.fazecast.jSerialComm.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class SerialCommunicator {
     private SerialPort serialPort;
     private boolean portOpen = false;
+    private ConcurrentLinkedQueue<Byte> sendQueue = new ConcurrentLinkedQueue<>();
+    private ExecutorService sendExecutor;
+    private AtomicBoolean sending = new AtomicBoolean(false);
 
     private int baudRate = 9600;
     private int dataBits = 8;
@@ -17,22 +24,53 @@ public class SerialCommunicator {
         serialPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, 1000, 0);
 
         portOpen = serialPort.openPort();
+        if (portOpen) {
+            sendExecutor = Executors.newSingleThreadExecutor();
+        }
         return portOpen;
     }
 
     public void closePort() {
         if (serialPort != null && portOpen) {
+            if (sendExecutor != null) {
+                sendExecutor.shutdown();
+                sendExecutor = null;
+            }
             serialPort.closePort();
             portOpen = false;
+            sendQueue.clear();
+            sending.set(false);
         }
     }
 
     public boolean sendByte(byte data) {
         if (!portOpen) return false;
+        sendQueue.offer(data);
+        startAsyncSend();
+        return true;
+    }
 
-        byte[] buffer = new byte[]{data};
-        int bytesWritten = serialPort.writeBytes(buffer, 1);
-        return bytesWritten == 1;
+    private void startAsyncSend() {
+        if (sending.compareAndSet(false, true)) {
+            sendExecutor.execute(this::processSendQueue);
+        }
+    }
+
+    private void processSendQueue() {
+        try {
+            while (!sendQueue.isEmpty() && portOpen) {
+                Byte data = sendQueue.poll();
+                if (data != null) {
+                    byte[] buffer = new byte[]{data};
+                    serialPort.writeBytes(buffer, 1);
+                }
+            }
+        } finally {
+            sending.set(false);
+            if (!sendQueue.isEmpty()) {
+                startAsyncSend();
+            }
+        }
     }
 
     public Byte receiveByte() {
