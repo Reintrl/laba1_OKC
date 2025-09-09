@@ -35,17 +35,9 @@ public class MainController {
             110, 300, 600, 1200, 2400, 4800, 9600, 14400, 19200, 38400, 57600, 115200, 128000, 256000
     );
 
-    private final ObservableList<Integer> dataBitsList = FXCollections.observableArrayList(
-            5, 6, 7, 8
-    );
-
-    private final ObservableList<String> stopBitsList = FXCollections.observableArrayList(
-            "1", "1.5", "2"
-    );
-
-    private final ObservableList<String> parityList = FXCollections.observableArrayList(
-            "None", "Even", "Odd", "Mark", "Space"
-    );
+    private final ObservableList<Integer> dataBitsList = FXCollections.observableArrayList(5, 6, 7, 8);
+    private final ObservableList<String> stopBitsList = FXCollections.observableArrayList("1", "1.5", "2");
+    private final ObservableList<String> parityList = FXCollections.observableArrayList("None", "Even", "Odd", "Mark", "Space");
 
     @FXML
     public void initialize() {
@@ -178,8 +170,7 @@ public class MainController {
         } else if (hexDisplayCheck.isSelected()) {
             display = "HEX: " + ByteConverter.byteToHexString(data);
         } else {
-            display = "DEC: " + ByteConverter.byteToString(data) +
-                    " (CHAR: '" + (char) data + "')";
+            display = "DEC: " + data + " (CHAR: '" + (char) data + "')";
         }
 
         log("Received: " + display);
@@ -208,8 +199,7 @@ public class MainController {
                 } else if (hexDisplayCheck.isSelected()) {
                     display = "HEX: " + ByteConverter.byteToHexString(data);
                 } else {
-                    display = "DEC: " + ByteConverter.byteToString(data) +
-                            " (CHAR: '" + (char) data + "')";
+                    display = "DEC: " + data + " (CHAR: '" + (char) data + "')";
                 }
 
                 log("Sent: " + display);

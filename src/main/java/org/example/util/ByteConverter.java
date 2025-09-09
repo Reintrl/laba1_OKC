@@ -16,10 +16,6 @@ public class ByteConverter {
         }
     }
 
-    public static String byteToString(byte b) {
-        return Byte.toString(b);
-    }
-
     public static String byteToHexString(byte b) {
         return String.format("%02X", b);
     }

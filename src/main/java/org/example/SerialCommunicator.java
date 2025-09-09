@@ -11,15 +11,6 @@ public class SerialCommunicator {
     private int stopBits = SerialPort.ONE_STOP_BIT;
     private int parity = SerialPort.NO_PARITY;
 
-    public SerialCommunicator() {}
-
-    public SerialCommunicator(int baudRate, int dataBits, int stopBits, int parity) {
-        this.baudRate = baudRate;
-        this.dataBits = dataBits;
-        this.stopBits = stopBits;
-        this.parity = parity;
-    }
-
     public boolean openPort(String portName) {
         serialPort = SerialPort.getCommPort(portName);
         serialPort.setComPortParameters(baudRate, dataBits, stopBits, parity);
@@ -67,14 +58,7 @@ public class SerialCommunicator {
         }
     }
 
-    public int getBaudRate() { return baudRate; }
-    public int getDataBits() { return dataBits; }
-    public int getStopBits() { return stopBits; }
-    public int getParity() { return parity; }
     public boolean isPortOpen() { return portOpen; }
-    public String getPortName() {
-        return serialPort != null ? serialPort.getSystemPortName() : "";
-    }
 
     public static String[] getAvailablePorts() {
         SerialPort[] ports = SerialPort.getCommPorts();
