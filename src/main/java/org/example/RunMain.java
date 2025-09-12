@@ -16,7 +16,7 @@ public class RunMain extends Application {
         MainController controller = loader.getController();
 
         primaryStage.setTitle("Serial Communication Module - RS-232/RS-485");
-        primaryStage.setScene(new Scene(root, 800, 600));
+        primaryStage.setScene(new Scene(root, 1280, 720));
         primaryStage.show();
 
         primaryStage.setOnCloseRequest(event -> {

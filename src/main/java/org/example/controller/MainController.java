@@ -80,19 +80,22 @@ public class MainController {
         int baudRate = baudRateSelector.getValue();
         int dataBits = dataBitsSelector.getValue();
         int stopBits;
+
         switch (stopBitsSelector.getValue()) {
-            case "1.5": stopBits = SerialPort.ONE_POINT_FIVE_STOP_BITS; break;
-            case "2": stopBits = SerialPort.TWO_STOP_BITS; break;
-            default: stopBits = SerialPort.ONE_STOP_BIT; break;
+            case "1.5"-> stopBits = SerialPort.ONE_POINT_FIVE_STOP_BITS;
+            case "2" -> stopBits = SerialPort.TWO_STOP_BITS;
+            default -> stopBits = SerialPort.ONE_STOP_BIT;
         }
         int parity;
+
         switch (paritySelector.getValue()) {
-            case "Even": parity = SerialPort.EVEN_PARITY; break;
-            case "Odd": parity = SerialPort.ODD_PARITY; break;
-            case "Mark": parity = SerialPort.MARK_PARITY; break;
-            case "Space": parity = SerialPort.SPACE_PARITY; break;
-            default: parity = SerialPort.NO_PARITY; break;
+            case "Even" -> parity = SerialPort.EVEN_PARITY;
+            case "Odd" -> parity = SerialPort.ODD_PARITY;
+            case "Mark" -> parity = SerialPort.MARK_PARITY;
+            case "Space" -> parity = SerialPort.SPACE_PARITY;
+            default -> parity = SerialPort.NO_PARITY;
         }
+
         communicator.setPortParameters(baudRate, dataBits, stopBits, parity);
         if (communicator.openPort(port)) {
             log("Port " + port + " opened successfully");
@@ -106,6 +109,7 @@ public class MainController {
         } else {
             log("Failed to open port " + port);
         }
+        System.out.println("Settings: " + baudRate + ", " + dataBits + ", " + stopBits + ", " + parity);
     }
 
     private void closePort() {
